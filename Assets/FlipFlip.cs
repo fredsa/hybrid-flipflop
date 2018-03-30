@@ -15,9 +15,16 @@ public class FlipFlip : MonoBehaviour {
 		while (true) {
 			attempts++;
 			Debug.LogFormat ("Frame #{0}: \n\n------------------------------", Time.frameCount);
-			Debug.LogFormat ("Frame #{0}: Iteration # {1}", Time.frameCount, attempts);
 			Debug.LogFormat ("Frame #{0}: XRSettings.loadedDeviceName==\"{1}\" // Currently loaded device name.", Time.frameCount, XRSettings.loadedDeviceName);
 			Debug.LogFormat ("Frame #{0}: XRSettings.enabled=={1} // VR is {2}.", Time.frameCount, XRSettings.enabled, XRSettings.enabled ? "enabled" : "disabled");
+
+			// Debug.LogFormat ("Frame #{0}: Wait for it…", Time.frameCount);
+			// yield return null;
+
+			Debug.LogFormat ("Frame #{0}: To continue, run: adb shell input keyevent 'V'", Time.frameCount);
+			while(!Input.GetKeyDown(KeyCode.V)) {
+				yield return null;
+			}
 
 			string previousDeviceName = XRSettings.loadedDeviceName;
 			string desiredDeviceName = GetCanonicalDeviceName (GetNextSupportedDeviceName ());
@@ -47,7 +54,7 @@ public class FlipFlip : MonoBehaviour {
 				failures++;
 			}
 			float percentFail = (float) failures / attempts * 100;
-			Debug.LogFormat ("Frame #{0}: TOTALS: percentFail={1:.0}%, attempts=={2}, successes=={3}, failures=={4}", Time.frameCount, percentFail, attempts, successes, failures);
+			Debug.LogFormat ("Frame #{0}: TOTALS: percentFail={1:0.0}%, attempts=={2}, successes=={3}, failures=={4}", Time.frameCount, percentFail, attempts, successes, failures);
 		}
 	}
 
